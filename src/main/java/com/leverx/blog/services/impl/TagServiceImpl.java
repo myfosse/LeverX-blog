@@ -1,11 +1,41 @@
 package com.leverx.blog.services.impl;
 
+import com.leverx.blog.converters.TagConverter;
+import com.leverx.blog.payload.request.entities.TagRequest;
+import com.leverx.blog.payload.response.entities.TagResponse;
+import com.leverx.blog.repositories.TagRepository;
 import com.leverx.blog.services.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Andrey Egorov
- */
+import javax.persistence.EntityNotFoundException;
+
+/** @author Andrey Egorov */
 @Service
 public class TagServiceImpl implements TagService {
+
+  private final TagRepository tagRepository;
+
+  @Autowired
+  public TagServiceImpl(TagRepository tagRepository) {
+    this.tagRepository = tagRepository;
+  }
+
+  @Override
+  public TagResponse save(TagRequest tagRequest) {
+    return TagConverter.convertEntityToResponse(
+        tagRepository.save(TagConverter.convertRequestToEntity(tagRequest)));
+  }
+
+  @Override
+  public TagResponse findById(Long id) {
+    return TagConverter.convertEntityToResponse(
+        tagRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+  }
+
+  @Override
+  public TagResponse findByName(String name) {
+    return TagConverter.convertEntityToResponse(
+        tagRepository.findByName(name).orElseThrow(EntityNotFoundException::new));
+  }
 }

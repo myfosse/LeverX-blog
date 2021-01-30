@@ -8,6 +8,12 @@ spring:
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
   mail:
     host: ${MAIL_HOST}
     username: ${MAIL_USERNAME}
@@ -21,12 +27,6 @@ spring:
             enable: true
             required: true
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-
 logging:
   level:
     org.springframework: INFO
@@ -35,5 +35,4 @@ logging:
 app:
   jwtSecret: ${JWT_SECRET_KEY}
   jwtExpirationMs: ${JWT_EXPIRATION}
-  jwtExpirationRememberMeMs: ${JWT_EXPIRATION_REMEMBER_ME}
   createPasswordURL: "http://localhost:8080/sign/createPassword?code="

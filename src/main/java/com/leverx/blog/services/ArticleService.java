@@ -1,8 +1,8 @@
 package com.leverx.blog.services;
 
-import com.leverx.blog.dto.ArticleDTO;
-import com.leverx.blog.entities.Article;
 import com.leverx.blog.entities.EStatus;
+import com.leverx.blog.payload.request.entities.ArticleRequest;
+import com.leverx.blog.payload.response.entities.ArticleResponse;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ import java.util.List;
  */
 public interface ArticleService {
 
-    Article save(Article article);
+    ArticleResponse save(ArticleRequest articleRequest);
 
-    ArticleDTO update(ArticleDTO articleDTO);
+    ArticleResponse update(ArticleRequest articleRequest);
 
-    Article findById(Long id);
+    ArticleResponse findById(Long id);
 
     void deleteById(Long id);
 
-    List<Article> getAllByStatus(EStatus status);
+    List<ArticleResponse> getAllByStatus(EStatus status);
 }

@@ -1,5 +1,6 @@
 package com.leverx.blog.payload.request.entities;
 
+import com.leverx.blog.entities.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class ArticleRequest {
   @Size(min = 10, max = 10000)
   private String text;
 
-  @NotBlank private String status;
+  private EStatus status;
 
   private Long userID;
 

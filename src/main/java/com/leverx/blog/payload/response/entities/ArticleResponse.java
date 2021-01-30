@@ -2,7 +2,6 @@ package com.leverx.blog.payload.response.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.leverx.blog.entities.EStatus;
-import com.leverx.blog.payload.request.entities.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class ArticleResponse {
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate updatedAt;
 
-  private UserRequest userRequest;
+  private UserResponse userResponse;
 
   private Set<TagResponse> tags;
 }

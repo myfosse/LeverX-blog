@@ -1,8 +1,6 @@
 package com.leverx.blog.controllers;
 
-import com.leverx.blog.dto.ArticleDTO;
 import com.leverx.blog.entities.EStatus;
-import com.leverx.blog.payload.response.MessageResponse;
 import com.leverx.blog.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +19,14 @@ public class ArticleController {
     this.articleService = articleService;
   }
 
-  @PostMapping("/")
+  @PostMapping
   public @ResponseBody ResponseEntity<?> addArticle() {
 
+    return new ResponseEntity<>(articleService.getAllByStatus(EStatus.PUBLIC), HttpStatus.CREATED);
+  }
+
+  @GetMapping
+  public @ResponseBody ResponseEntity<?> getAllPublicArticles() {
     return new ResponseEntity<>(articleService.getAllByStatus(EStatus.PUBLIC), HttpStatus.OK);
   }
 }
