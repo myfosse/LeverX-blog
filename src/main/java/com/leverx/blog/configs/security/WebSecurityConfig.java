@@ -88,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             HttpMethod.DELETE,
             PATH + "/articles/{id:[\\d+]}",
             PATH + "/articles/{id:[\\d+]}/comments/{commentID:[\\d+]",
-            PATH + "/users/{id:[\\\\d+]}\"")
+            PATH + "/users/{id:[\\d+]}")
         .hasAuthority("ROLE_USER");
 
     http.addFilterBefore(
