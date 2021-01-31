@@ -1,18 +1,31 @@
 package com.leverx.blog.services;
 
+import com.leverx.blog.entities.User;
 import com.leverx.blog.payload.request.entities.UserRequest;
 import com.leverx.blog.payload.response.entities.UserResponse;
 
-/**
- * @author Andrey Egorov
- */
+import java.util.Optional;
+
+/** @author Andrey Egorov */
 public interface UserService {
 
-    UserResponse save(UserRequest userRequest);
+  User save(User save);
 
-    UserResponse update(UserRequest userRequest);
+  UserResponse save(UserRequest userRequest);
 
-    UserResponse findById(Long id);
+  UserResponse update(UserRequest userRequest);
 
-    void deleteById(Long id);
+  UserResponse findById(Long id);
+
+  void deleteById(Long id);
+
+  UserResponse findByEmail(String email);
+
+  boolean existsByEmail(String email);
+
+  String saveUserToRedis(User user);
+
+  Optional<User> getUserByTokenFromRedis(String token);
+
+  void removeUserByTokenFromRedis(String token);
 }
