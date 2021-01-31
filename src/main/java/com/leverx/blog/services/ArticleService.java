@@ -20,4 +20,6 @@ public interface ArticleService {
     void deleteById(Long id);
 
     List<ArticleResponse> getAllByStatus(EStatus status);
+
+    List<ArticleResponse> getAllByUserId(Long userID);
 }

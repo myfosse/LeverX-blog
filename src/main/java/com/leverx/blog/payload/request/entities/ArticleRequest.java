@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.SecondaryTable;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -31,5 +33,7 @@ public class ArticleRequest {
 
   private Long userID;
 
-  @NotBlank private Set<TagRequest> tags;
+  @NotEmpty
+  @Size(min = 1, max = 10)
+  private Set<TagRequest> tags;
 }
