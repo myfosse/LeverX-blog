@@ -14,13 +14,12 @@ public class TagController {
   private final TagService tagService;
 
   @Autowired
-  public TagController(TagService tagService) {
+  public TagController(final TagService tagService) {
     this.tagService = tagService;
   }
 
   @GetMapping("/tags-cloud")
   public @ResponseBody ResponseEntity<?> getRatingForTags() {
-
     return new ResponseEntity<>(tagService.getTagsByRating(), HttpStatus.OK);
   }
 }

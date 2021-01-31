@@ -14,16 +14,16 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class ResetPasswordRequest {
 
-  @NotBlank(message = "Email can't be blank")
-  @Size(max = 60, message = "Max length of email 60 symbols")
-  @Email(message = "Email not valid")
+  @NotBlank
+  @Size(max = 60)
+  @Email
   private String email;
 
-  @NotBlank(message = "Password can't be blank")
+  @NotBlank
   @Size(min = 8, max = 60)
   private String password;
 
-  @NotBlank(message = "Password can't be blank")
+  @NotBlank
   @Size(min = 8, max = 60)
   private String passwordConfirmation;
 }

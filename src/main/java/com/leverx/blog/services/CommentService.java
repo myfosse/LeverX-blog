@@ -8,13 +8,13 @@ import java.util.List;
 /** @author Andrey Egorov */
 public interface CommentService {
 
-  CommentResponse save(CommentRequest commentRequest);
+  CommentResponse save(final CommentRequest commentRequest);
 
-  CommentResponse update(CommentRequest commentRequest);
+  CommentResponse update(final CommentRequest commentRequest);
 
-  CommentResponse findById(Long id);
+  CommentResponse findById(final Long id);
 
-  void deleteById(Long id);
+  void deleteById(final Long id);
 
-  List<CommentResponse> getAllByArticleID(Long articleID);
+  List<CommentResponse> getAllByArticleID(final Long articleID);
 }

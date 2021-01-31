@@ -8,7 +8,6 @@ import com.leverx.blog.services.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +23,11 @@ public class ArticleController {
   private final ArticleService articleService;
 
   @Autowired
-  public ArticleController(ArticleService articleService) {
+  public ArticleController(final ArticleService articleService) {
     this.articleService = articleService;
   }
 
   @PostMapping("/articles")
-  @PreAuthorize("hasAuthority('ROLE_USER')")
   public @ResponseBody ResponseEntity<?> addArticle(
       @Valid @RequestBody final ArticleRequest articleRequest) {
     articleRequest.setUserID(getAuthenticationUserID());
@@ -37,7 +35,6 @@ public class ArticleController {
   }
 
   @GetMapping("/articles/my")
-  @PreAuthorize("hasAuthority('ROLE_USER')")
   public @ResponseBody ResponseEntity<?> getUserArticles() {
     return new ResponseEntity<>(
         articleService.getAllByUserId(getAuthenticationUserID()), HttpStatus.OK);
@@ -45,14 +42,15 @@ public class ArticleController {
 
   @GetMapping("/articles")
   public @ResponseBody ResponseEntity<?> getAllPublicArticles(
-      @RequestParam(value = "tags") ArrayList<TagRequest> tagRequests) {
-
-    return new ResponseEntity<>(
-        articleService.getAllPublicArticlesByTagsIn(new HashSet<>(tagRequests)), HttpStatus.OK);
+      @RequestParam(value = "tags") final ArrayList<TagRequest> tagRequests) {
+    if (tagRequests != null) {
+      return new ResponseEntity<>(
+          articleService.getAllPublicArticlesByTagsIn(new HashSet<>(tagRequests)), HttpStatus.OK);
+    }
+    return new ResponseEntity<>(articleService.getAllPublicArticles(), HttpStatus.OK);
   }
 
   @PutMapping("/articles/{id}")
-  @PreAuthorize("hasAuthority('ROLE_USER')")
   public @ResponseBody ResponseEntity<?> updateArticle(
       @PathVariable Long id, @Valid @RequestBody final ArticleRequest articleRequest) {
 
@@ -73,8 +71,7 @@ public class ArticleController {
   }
 
   @DeleteMapping("/articles/{id}")
-  @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-  public @ResponseBody ResponseEntity<?> deleteArticle(@PathVariable Long id) {
+  public @ResponseBody ResponseEntity<?> deleteArticle(@PathVariable final Long id) {
 
     if (id < 0
         || !articleService

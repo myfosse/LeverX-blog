@@ -24,12 +24,12 @@ public class UserDetailsImpl implements UserDetails {
   private Collection<? extends GrantedAuthority> authorities;
 
   public UserDetailsImpl(
-      Long id,
-      String firstName,
-      String lastName,
-      String email,
-      String password,
-      Collection<? extends GrantedAuthority> authorities) {
+      final Long id,
+      final String firstName,
+      final String lastName,
+      final String email,
+      final String password,
+      final Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -38,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
     this.authorities = authorities;
   }
 
-  public static UserDetailsImpl build(User user) {
+  public static UserDetailsImpl build(final User user) {
 
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
@@ -83,7 +83,7 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     UserDetailsImpl user = (UserDetailsImpl) o;

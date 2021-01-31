@@ -7,9 +7,9 @@ import java.util.Optional;
 /** @author Andrey Egorov */
 public interface RedisRepository {
 
-  String saveUserToRedis(User user);
+  String saveUserToRedis(final User user);
 
-  Optional<User> getUserByTokenFromRedis(String token);
+  Optional<User> getUserByTokenFromRedis(final String token);
 
-  void removeUserByTokenFromRedis(String token);
+  void removeUserByTokenFromRedis(final String token);
 }

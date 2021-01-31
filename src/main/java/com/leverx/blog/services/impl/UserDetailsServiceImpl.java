@@ -16,13 +16,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   private final UserRepository userRepository;
 
   @Autowired
-  public UserDetailsServiceImpl(UserRepository userRepository) {
+  public UserDetailsServiceImpl(final UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
   @Transactional
-  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
     User user =
         userRepository
             .findByEmail(email)

@@ -21,7 +21,7 @@ public class RedisRepositoryImpl implements RedisRepository {
   private final RedisTemplate<String, Object> redisTemplate;
 
   @Autowired
-  public RedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
+  public RedisRepositoryImpl(final RedisTemplate<String, Object> redisTemplate) {
     this.redisTemplate = redisTemplate;
   }
 
@@ -32,7 +32,7 @@ public class RedisRepositoryImpl implements RedisRepository {
   }
 
   @Override
-  public String saveUserToRedis(User user) {
+  public String saveUserToRedis(final User user) {
     String token = generateToken();
     redisTemplate.opsForValue().set(token, user);
     redisTemplate.expire(token, EXPIRE_TIME_IN_HOURS, TimeUnit.HOURS);
@@ -40,13 +40,13 @@ public class RedisRepositoryImpl implements RedisRepository {
   }
 
   @Override
-  public Optional<User> getUserByTokenFromRedis(String token) {
+  public Optional<User> getUserByTokenFromRedis(final String token) {
     User user = (User) redisTemplate.opsForValue().get(token);
     return Optional.ofNullable(user);
   }
 
   @Override
-  public void removeUserByTokenFromRedis(String token) {
+  public void removeUserByTokenFromRedis(final String token) {
     redisTemplate.opsForValue().getOperations().delete(token);
   }
 }

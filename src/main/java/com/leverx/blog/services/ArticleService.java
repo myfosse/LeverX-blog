@@ -12,17 +12,17 @@ import java.util.Set;
  */
 public interface ArticleService {
 
-    ArticleResponse save(ArticleRequest articleRequest);
+    ArticleResponse save(final ArticleRequest articleRequest);
 
-    ArticleResponse update(ArticleRequest articleRequest);
+    ArticleResponse update(final ArticleRequest articleRequest);
 
-    ArticleResponse findById(Long id);
+    ArticleResponse findById(final Long id);
 
-    void deleteById(Long id);
+    void deleteById(final Long id);
 
     List<ArticleResponse> getAllPublicArticles();
 
-    List<ArticleResponse> getAllByUserId(Long userID);
+    List<ArticleResponse> getAllByUserId(final Long userID);
 
-    List<ArticleResponse> getAllPublicArticlesByTagsIn(Set<TagRequest> tagList);
+    List<ArticleResponse> getAllPublicArticlesByTagsIn(final Set<TagRequest> tagList);
 }

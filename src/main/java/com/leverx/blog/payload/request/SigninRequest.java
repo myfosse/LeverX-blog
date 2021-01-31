@@ -13,10 +13,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class SigninRequest {
 
-  @NotBlank
-  @Email
-    private String email;
+  @NotBlank @Email private String email;
 
-  @NotBlank
-  private String password;
+  @NotBlank private String password;
 }

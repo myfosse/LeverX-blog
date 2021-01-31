@@ -9,11 +9,11 @@ import java.util.List;
 /** @author Andrey Egorov */
 public interface TagService {
 
-  TagResponse save(TagRequest tagRequest);
+  TagResponse save(final TagRequest tagRequest);
 
-  TagResponse findById(Long id);
+  TagResponse findById(final Long id);
 
-  TagResponse findByName(String name);
+  TagResponse findByName(final String name);
 
   List<TagRatingResponse> getTagsByRating();
 }

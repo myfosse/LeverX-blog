@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /** @author Andrey Egorov */
 public class UserConverter {
 
-  public static User convertRequestToEntity(UserRequest userRequest) {
+  public static User convertRequestToEntity(final UserRequest userRequest) {
     return User.builder()
         .id(userRequest.getId())
         .firstName(userRequest.getFirstName())
@@ -20,7 +20,7 @@ public class UserConverter {
         .build();
   }
 
-  public static UserResponse convertEntityToResponse(User user) {
+  public static UserResponse convertEntityToResponse(final User user) {
     return UserResponse.builder()
         .id(user.getId())
         .firstName(user.getFirstName())
@@ -30,13 +30,7 @@ public class UserConverter {
         .build();
   }
 
-  public static List<User> convertListOfRequestToEntity(List<UserRequest> userRequestList) {
-    return userRequestList.stream()
-        .map(UserConverter::convertRequestToEntity)
-        .collect(Collectors.toList());
-  }
-
-  public static List<UserResponse> convertListOfEntityToRequest(List<User> userList) {
+  public static List<UserResponse> convertListOfEntityToRequest(final List<User> userList) {
     return userList.stream()
         .map(UserConverter::convertEntityToResponse)
         .collect(Collectors.toList());

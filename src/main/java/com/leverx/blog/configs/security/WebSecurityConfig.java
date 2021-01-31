@@ -18,8 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.net.http.HttpRequest;
-
 /** @author Andrey Egorov */
 @Configuration
 @EnableWebSecurity
@@ -30,13 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired private AuthEntryPointJwt unauthorizedHandler;
 
+  private static final String PATH = "/api/v1/";
+
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
 
   @Override
-  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
+  public void configure(final AuthenticationManagerBuilder authenticationManagerBuilder)
       throws Exception {
     authenticationManagerBuilder
         .userDetailsService(userDetailsService)
@@ -56,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   // TODO: edit config
   @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  protected void configure(final HttpSecurity http) throws Exception {
+
     http.cors()
         .and()
         .csrf()
@@ -69,7 +70,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers("/api/v1/auth/**")
-        .anonymous();
+        .anonymous()
+        .antMatchers(
+            HttpMethod.GET,
+            PATH + "/articles",
+            PATH + "/{id:[\\d+]}/comments/**",
+            PATH + "/tags-cloud",
+            PATH + "/users/**")
+        .permitAll()
+        .antMatchers(HttpMethod.GET, PATH + "/articles/my")
+        .hasAuthority("ROLE_USER")
+        .antMatchers(HttpMethod.POST, PATH + "/articles", PATH + "/articles/{id:[\\d+]}/comments")
+        .hasAuthority("ROLE_USER")
+        .antMatchers(HttpMethod.PUT, PATH + "/articles/{id:[\\d+]}", PATH + "/users/{id:[\\d+]}")
+        .hasAuthority("ROLE_USER")
+        .antMatchers(
+            HttpMethod.DELETE,
+            PATH + "/articles/{id:[\\d+]}",
+            PATH + "/articles/{id:[\\d+]}/comments/{commentID:[\\d+]",
+            PATH + "/users/{id:[\\\\d+]}\"")
+        .hasAuthority("ROLE_USER");
 
     http.addFilterBefore(
         authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

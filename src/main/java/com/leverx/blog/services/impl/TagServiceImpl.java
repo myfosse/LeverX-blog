@@ -20,24 +20,24 @@ public class TagServiceImpl implements TagService {
   private final TagRepository tagRepository;
 
   @Autowired
-  public TagServiceImpl(TagRepository tagRepository) {
+  public TagServiceImpl(final TagRepository tagRepository) {
     this.tagRepository = tagRepository;
   }
 
   @Override
-  public TagResponse save(TagRequest tagRequest) {
+  public TagResponse save(final TagRequest tagRequest) {
     return TagConverter.convertEntityToResponse(
         tagRepository.save(TagConverter.convertRequestToEntity(tagRequest)));
   }
 
   @Override
-  public TagResponse findById(Long id) {
+  public TagResponse findById(final Long id) {
     return TagConverter.convertEntityToResponse(
         tagRepository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
 
   @Override
-  public TagResponse findByName(String name) {
+  public TagResponse findByName(final String name) {
     return TagConverter.convertEntityToResponse(
         tagRepository.findByName(name).orElseThrow(EntityNotFoundException::new));
   }

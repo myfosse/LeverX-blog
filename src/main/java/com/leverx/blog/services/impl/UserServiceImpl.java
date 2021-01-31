@@ -2,7 +2,6 @@ package com.leverx.blog.services.impl;
 
 import com.leverx.blog.converters.UserConverter;
 import com.leverx.blog.entities.User;
-import com.leverx.blog.exceptions.CustomUserException;
 import com.leverx.blog.payload.request.entities.UserRequest;
 import com.leverx.blog.payload.response.entities.UserResponse;
 import com.leverx.blog.repositories.RedisRepository;
@@ -35,14 +34,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User save(User user) {
+  public User save(final User user) {
     user.setCreatedAt(LocalDate.now());
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     return userRepository.save(user);
   }
 
   @Override
-  public UserResponse save(UserRequest userRequest) {
+  public UserResponse save(final UserRequest userRequest) {
     User user = UserConverter.convertRequestToEntity(userRequest);
     user.setCreatedAt(LocalDate.now());
     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -50,8 +49,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserResponse update(UserRequest userRequest) {
-
+  public UserResponse update(final UserRequest userRequest) {
     User user = UserConverter.convertRequestToEntity(userRequest);
     user.setId(userRequest.getId());
     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserResponse findById(Long id) {
+  public UserResponse findById(final Long id) {
     return UserConverter.convertEntityToResponse(
         userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
@@ -71,38 +69,33 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(final Long id) {
     userRepository.deleteById(id);
   }
 
   @Override
-  public UserResponse findByEmail(String email) {
+  public UserResponse findByEmail(final String email) {
     return UserConverter.convertEntityToResponse(
         userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new));
   }
 
   @Override
-  public User getByEmail(String email) {
+  public User getByEmail(final String email) {
     return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
   }
 
   @Override
-  public boolean existsByEmail(String email) {
-    return userRepository.existsByEmail(email);
-  }
-
-  @Override
-  public String saveUserToRedis(User user) {
+  public String saveUserToRedis(final User user) {
     return redisRepository.saveUserToRedis(user);
   }
 
   @Override
-  public User getUserByTokenFromRedis(String token) {
-    return redisRepository.getUserByTokenFromRedis(token).orElseThrow(CustomUserException::new);
+  public User getUserByTokenFromRedis(final String token) {
+    return redisRepository.getUserByTokenFromRedis(token).orElseThrow(EntityNotFoundException::new);
   }
 
   @Override
-  public void removeUserByTokenFromRedis(String token) {
+  public void removeUserByTokenFromRedis(final String token) {
     redisRepository.removeUserByTokenFromRedis(token);
   }
 }

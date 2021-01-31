@@ -6,6 +6,7 @@ import com.leverx.blog.entities.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +14,9 @@ import java.util.Set;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    List<Article> getAllByStatus(EStatus status);
+    List<Article> getAllByStatus(final EStatus status);
 
-    List<Article> getAllByUserId(Long userID);
+    List<Article> getAllByUserId(final Long userID);
 
-    List<Article> getAllByTagsInAndStatus(Set<Tag> tagList, EStatus status);
+    List<Article> getAllByTagsInAndStatus(Set<Tag> tags, EStatus status);
 }

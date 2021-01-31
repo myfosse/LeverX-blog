@@ -36,10 +36,10 @@ public class AuthController {
 
   @Autowired
   public AuthController(
-      AuthenticationManager authenticationManager,
-      EmailService emailService,
-      UserService userService,
-      JwtUtils jwtUtils) {
+      final AuthenticationManager authenticationManager,
+      final EmailService emailService,
+      final UserService userService,
+      final JwtUtils jwtUtils) {
     this.authenticationManager = authenticationManager;
     this.emailService = emailService;
     this.userService = userService;
@@ -55,7 +55,7 @@ public class AuthController {
   }
 
   @GetMapping("/confirm/{token}")
-  public ResponseEntity<?> confirmUser(@PathVariable String token) {
+  public ResponseEntity<?> confirmUser(@PathVariable final String token) {
     User user = userService.getUserByTokenFromRedis(token);
     userService.save(user);
     userService.removeUserByTokenFromRedis(token);
@@ -88,7 +88,8 @@ public class AuthController {
 
   @PostMapping("/forgot-password")
   public ResponseEntity<?> forgotPassword(
-      @Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) throws MessagingException {
+      @Valid @RequestBody final ForgotPasswordRequest forgotPasswordRequest)
+      throws MessagingException {
     User user = userService.getByEmail(forgotPasswordRequest.getEmail());
     String token = userService.saveUserToRedis(user);
     emailService.sendMessageForResetPassword(forgotPasswordRequest.getEmail(), token);
@@ -97,7 +98,7 @@ public class AuthController {
 
   @PostMapping("/reset/{token}")
   public @ResponseBody ResponseEntity<?> createPassword(
-      @PathVariable String token,
+      @PathVariable final String token,
       @Valid @RequestBody final ResetPasswordRequest resetPasswordRequest) {
 
     if (!resetPasswordRequest

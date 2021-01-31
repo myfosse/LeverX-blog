@@ -26,12 +26,12 @@ public class EmailServiceImpl implements EmailService {
   private final JavaMailSender mailSender;
 
   @Autowired
-  public EmailServiceImpl(JavaMailSender mailSender) {
+  public EmailServiceImpl(final JavaMailSender mailSender) {
     this.mailSender = mailSender;
   }
 
   @Override
-  public void sendMessageForConfirmAccount(String email, String token) throws MessagingException {
+  public void sendMessageForConfirmAccount(final String email, final String token) throws MessagingException {
 
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -58,7 +58,7 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public void sendMessageForResetPassword(String email, String token) throws MessagingException {
+  public void sendMessageForResetPassword(final String email, final String token) throws MessagingException {
 
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message);

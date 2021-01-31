@@ -1,6 +1,5 @@
 package com.leverx.blog.services.impl;
 
-import com.leverx.blog.converters.ArticleConverter;
 import com.leverx.blog.converters.CommentConverter;
 import com.leverx.blog.entities.Article;
 import com.leverx.blog.entities.Comment;
@@ -37,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
-  public CommentResponse save(CommentRequest commentRequest) {
+  public CommentResponse save(final CommentRequest commentRequest) {
 
     User user =
         userRepository
@@ -58,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
-  public CommentResponse update(CommentRequest commentRequest) {
+  public CommentResponse update(final CommentRequest commentRequest) {
 
     User user =
         userRepository
@@ -79,19 +78,19 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
-  public CommentResponse findById(Long id) {
+  public CommentResponse findById(final Long id) {
     return CommentConverter.convertEntityToResponse(
         commentRepository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(final Long id) {
     commentRepository.deleteById(id);
   }
 
   @Override
-  public List<CommentResponse> getAllByArticleID(Long articleID) {
+  public List<CommentResponse> getAllByArticleID(final Long articleId) {
     return CommentConverter.convertListOfEntityToRequest(
-        commentRepository.getAllByArticleId(articleID));
+        commentRepository.getAllByArticleId(articleId));
   }
 }

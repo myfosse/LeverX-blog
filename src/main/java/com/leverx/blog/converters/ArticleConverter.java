@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 /** @author Andrey Egorov */
 public class ArticleConverter {
 
-  public static Article convertRequestToEntity(ArticleRequest articleRequest) {
+  public static Article convertRequestToEntity(final ArticleRequest articleRequest) {
     return Article.builder()
+        .id(articleRequest.getId())
         .title(articleRequest.getTitle())
         .text(articleRequest.getText())
         .status(articleRequest.getStatus())
@@ -19,7 +20,7 @@ public class ArticleConverter {
         .build();
   }
 
-  public static ArticleResponse convertEntityToResponse(Article article) {
+  public static ArticleResponse convertEntityToResponse(final Article article) {
     return ArticleResponse.builder()
         .id(article.getId())
         .title(article.getTitle())
@@ -32,14 +33,7 @@ public class ArticleConverter {
         .build();
   }
 
-  public static List<Article> convertListOfRequestToEntity(
-      List<ArticleRequest> articleRequestList) {
-    return articleRequestList.stream()
-        .map(ArticleConverter::convertRequestToEntity)
-        .collect(Collectors.toList());
-  }
-
-  public static List<ArticleResponse> convertListOfEntityToRequest(List<Article> articleList) {
+  public static List<ArticleResponse> convertListOfEntityToRequest(final List<Article> articleList) {
     return articleList.stream()
         .map(ArticleConverter::convertEntityToResponse)
         .collect(Collectors.toList());

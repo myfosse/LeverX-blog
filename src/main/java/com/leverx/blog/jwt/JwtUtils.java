@@ -20,7 +20,7 @@ public class JwtUtils {
   @Value("${app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  public String generateJwtToken(Authentication authentication) {
+  public String generateJwtToken(final Authentication authentication) {
 
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
@@ -32,11 +32,11 @@ public class JwtUtils {
         .compact();
   }
 
-  public String getUserNameFromJwtToken(String token) {
+  public String getUserNameFromJwtToken(final String token) {
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
   }
 
-  public boolean validateJwtToken(String authToken) {
+  public boolean validateJwtToken(final String authToken) {
 
     try {
       Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

@@ -20,7 +20,7 @@ public class UserController {
   private final UserService userService;
 
   @Autowired
-  public UserController(UserService userService) {
+  public UserController(final UserService userService) {
     this.userService = userService;
   }
 
@@ -30,13 +30,13 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUserByID(@PathVariable Long id) {
+  public ResponseEntity<?> getUserByID(@PathVariable final Long id) {
     return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateUserById(
-      @PathVariable Long id, @Valid @RequestBody final UserRequest userRequest) {
+      @PathVariable final Long id, @Valid @RequestBody final UserRequest userRequest) {
     if (id.equals(getAuthenticationUserID())) {
       userRequest.setId(id);
       return new ResponseEntity<>(userService.update(userRequest), HttpStatus.OK);
@@ -44,8 +44,8 @@ public class UserController {
     return new ResponseEntity<>(new MessageResponse("You have no rights"), HttpStatus.BAD_REQUEST);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<?> deleteById(@PathVariable Long id) {
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteById(@PathVariable final Long id) {
     if (id.equals(getAuthenticationUserID())) {
       userService.deleteById(id);
     }

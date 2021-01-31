@@ -1,16 +1,12 @@
 package com.leverx.blog.controllers;
 
-import com.leverx.blog.payload.request.entities.ArticleRequest;
 import com.leverx.blog.payload.request.entities.CommentRequest;
 import com.leverx.blog.payload.response.MessageResponse;
-import com.leverx.blog.services.ArticleService;
 import com.leverx.blog.services.CommentService;
-import com.leverx.blog.services.UserService;
 import com.leverx.blog.services.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,34 +17,28 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/articles")
 public class CommentController {
 
-  private final ArticleService articleService;
   private final CommentService commentService;
-  private final UserService userService;
 
   @Autowired
-  public CommentController(
-      ArticleService articleService, CommentService commentService, UserService userService) {
-    this.articleService = articleService;
+  public CommentController(final CommentService commentService) {
     this.commentService = commentService;
-    this.userService = userService;
   }
 
   @GetMapping("/{id}/comments")
-  public @ResponseBody ResponseEntity<?> getAllCommentsForArticle(@PathVariable Long id) {
+  public @ResponseBody ResponseEntity<?> getAllCommentsForArticle(@PathVariable final Long id) {
 
     return new ResponseEntity<>(commentService.getAllByArticleID(id), HttpStatus.OK);
   }
 
   @GetMapping("/{id}/comments/{commentID}")
   public @ResponseBody ResponseEntity<?> getCommentByID(
-      @PathVariable Long id, @PathVariable Long commentID) {
+      @PathVariable final Long id, @PathVariable final Long commentID) {
     return new ResponseEntity<>(commentService.findById(commentID), HttpStatus.OK);
   }
 
   @PostMapping("/{id}/comments")
-  @PreAuthorize("hasAnyAuthority('ROLE_USER')")
   public @ResponseBody ResponseEntity<?> addComment(
-      @PathVariable Long id, @Valid @RequestBody final CommentRequest commentRequest) {
+      @PathVariable final Long id, @Valid @RequestBody final CommentRequest commentRequest) {
 
     commentRequest.setUserID(getAuthenticationUserID());
     commentRequest.setArticleID(id);
@@ -58,7 +48,7 @@ public class CommentController {
 
   @DeleteMapping("/{id}/comments/{commentID}")
   public @ResponseBody ResponseEntity<?> deleteCommentById(
-      @PathVariable Long id, @PathVariable Long commentID) {
+      @PathVariable final Long id, @PathVariable final Long commentID) {
 
     if (commentService.findById(id).getUserResponse().getId().equals(getAuthenticationUserID())
         || commentService

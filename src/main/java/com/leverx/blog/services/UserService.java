@@ -9,27 +9,25 @@ import java.util.List;
 /** @author Andrey Egorov */
 public interface UserService {
 
-  User save(User save);
+  User save(final User save);
 
-  UserResponse save(UserRequest userRequest);
+  UserResponse save(final UserRequest userRequest);
 
-  UserResponse update(UserRequest userRequest);
+  UserResponse update(final UserRequest userRequest);
 
-  UserResponse findById(Long id);
+  UserResponse findById(final Long id);
 
   List<UserResponse> getAll();
 
-  void deleteById(Long id);
+  void deleteById(final Long id);
 
-  UserResponse findByEmail(String email);
+  UserResponse findByEmail(final String email);
 
-  User getByEmail(String email);
+  User getByEmail(final String email);
 
-  boolean existsByEmail(String email);
+  String saveUserToRedis(final User user);
 
-  String saveUserToRedis(User user);
+  User getUserByTokenFromRedis(final String token);
 
-  User getUserByTokenFromRedis(String token);
-
-  void removeUserByTokenFromRedis(String token);
+  void removeUserByTokenFromRedis(final String token);
 }

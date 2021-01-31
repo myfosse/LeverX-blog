@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
-  public ArticleResponse save(ArticleRequest articleRequest) {
+  public ArticleResponse save(final ArticleRequest articleRequest) {
 
     User user =
         userRepository
@@ -66,7 +66,7 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
-  public ArticleResponse update(ArticleRequest articleRequest) {
+  public ArticleResponse update(final ArticleRequest articleRequest) {
 
     User user =
         userRepository
@@ -94,13 +94,13 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
-  public ArticleResponse findById(Long id) {
+  public ArticleResponse findById(final Long id) {
     return ArticleConverter.convertEntityToResponse(
         articleRepository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(final Long id) {
     articleRepository.deleteById(id);
   }
 
@@ -111,12 +111,12 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
-  public List<ArticleResponse> getAllByUserId(Long userID) {
-    return ArticleConverter.convertListOfEntityToRequest(articleRepository.getAllByUserId(userID));
+  public List<ArticleResponse> getAllByUserId(final Long userId) {
+    return ArticleConverter.convertListOfEntityToRequest(articleRepository.getAllByUserId(userId));
   }
 
   @Override
-  public List<ArticleResponse> getAllPublicArticlesByTagsIn(Set<TagRequest> tagList) {
+  public List<ArticleResponse> getAllPublicArticlesByTagsIn(final Set<TagRequest> tagList) {
 
     Set<Tag> tags = new HashSet<>();
 

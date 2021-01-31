@@ -10,11 +10,14 @@ import java.util.stream.Collectors;
 /** @author Andrey Egorov */
 public class CommentConverter {
 
-  public static Comment convertRequestToEntity(CommentRequest commentRequest) {
-    return Comment.builder().message(commentRequest.getMessage()).build();
+  public static Comment convertRequestToEntity(final CommentRequest commentRequest) {
+    return Comment.builder()
+        .id(commentRequest.getId())
+        .message(commentRequest.getMessage())
+        .build();
   }
 
-  public static CommentResponse convertEntityToResponse(Comment comment) {
+  public static CommentResponse convertEntityToResponse(final Comment comment) {
     return CommentResponse.builder()
         .id(comment.getId())
         .message(comment.getMessage())
@@ -24,14 +27,7 @@ public class CommentConverter {
         .build();
   }
 
-  public static List<Comment> convertListOfRequestToEntity(
-      List<CommentRequest> commentRequestList) {
-    return commentRequestList.stream()
-        .map(CommentConverter::convertRequestToEntity)
-        .collect(Collectors.toList());
-  }
-
-  public static List<CommentResponse> convertListOfEntityToRequest(List<Comment> commentList) {
+  public static List<CommentResponse> convertListOfEntityToRequest(final List<Comment> commentList) {
     return commentList.stream()
         .map(CommentConverter::convertEntityToResponse)
         .collect(Collectors.toList());
