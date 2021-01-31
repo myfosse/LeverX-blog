@@ -57,7 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
       if (tag.isPresent()) {
         tags.add(tag.get());
       } else {
-        tags.add(TagConverter.convertRequestToEntity(tagRequest));
+        tags.add(tagRepository.save(TagConverter.convertRequestToEntity(tagRequest)));
       }
     }
     article.setTags(tags);
@@ -75,6 +75,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     Article article = ArticleConverter.convertRequestToEntity(articleRequest);
     article.setUpdatedAt(LocalDate.now());
+    article.setCreatedAt(articleRepository.findById(articleRequest.getId()).get().getCreatedAt());
     article.setUser(user);
     article.setId(articleRequest.getId());
 
@@ -85,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
       if (tag.isPresent()) {
         tags.add(tag.get());
       } else {
-        tags.add(TagConverter.convertRequestToEntity(tagRequest));
+        tags.add(tagRepository.save(TagConverter.convertRequestToEntity(tagRequest)));
       }
     }
     article.setTags(tags);

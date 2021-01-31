@@ -18,7 +18,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
   @Query(
       value =
           "select t.id, t.name, count(a.article_id) as post_count from tags t"
-              + " inner join article_tags a on t.id = a.tag_id group by name order by count(tag_id) DESC",
+              + " left join article_tags a on t.id = a.tag_id group by name order by count(tag_id) DESC",
       nativeQuery = true)
   List<TagRatingView> getTagsByRating();
 }

@@ -57,27 +57,6 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
-  public CommentResponse update(final CommentRequest commentRequest) {
-
-    User user =
-        userRepository
-            .findById(commentRequest.getUserID())
-            .orElseThrow(EntityNotFoundException::new);
-
-    Article article =
-        articleRepository
-            .findById(commentRequest.getArticleID())
-            .orElseThrow(EntityNotFoundException::new);
-
-    Comment comment = CommentConverter.convertRequestToEntity(commentRequest);
-    comment.setArticle(article);
-    comment.setUser(user);
-    comment.setCreatedAt(LocalDate.now());
-
-    return CommentConverter.convertEntityToResponse(commentRepository.save(comment));
-  }
-
-  @Override
   public CommentResponse findById(final Long id) {
     return CommentConverter.convertEntityToResponse(
         commentRepository.findById(id).orElseThrow(EntityNotFoundException::new));

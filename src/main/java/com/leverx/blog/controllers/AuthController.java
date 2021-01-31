@@ -114,7 +114,7 @@ public class AuthController {
     userService.removeUserByTokenFromRedis(token);
 
     return ResponseEntity.ok(
-        "Successfully created a new password for the user with email: "
-            + resetPasswordRequest.getEmail());
+            new MessageResponse("Successfully created a new password for the user with email: "
+            + resetPasswordRequest.getEmail()));
   }
 }

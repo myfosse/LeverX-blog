@@ -41,11 +41,12 @@ public class ArticleController {
   }
 
   @GetMapping("/articles")
-  public @ResponseBody ResponseEntity<?> getAllPublicArticles(
+  public @ResponseBody ResponseEntity<?> getAllPublicArticlesWithTagFilter(
       @RequestParam(value = "tags") final ArrayList<TagRequest> tagRequests) {
-    if (tagRequests != null) {
+    if (tagRequests != null && tagRequests.size() != 0) {
       return new ResponseEntity<>(
-          articleService.getAllPublicArticlesByTagsIn(new HashSet<>(tagRequests)), HttpStatus.OK);
+          articleService.getAllPublicArticlesByTagsIn(new HashSet<>(tagRequests)),
+          HttpStatus.OK);
     }
     return new ResponseEntity<>(articleService.getAllPublicArticles(), HttpStatus.OK);
   }

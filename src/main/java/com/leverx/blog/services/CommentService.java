@@ -10,8 +10,6 @@ public interface CommentService {
 
   CommentResponse save(final CommentRequest commentRequest);
 
-  CommentResponse update(final CommentRequest commentRequest);
-
   CommentResponse findById(final Long id);
 
   void deleteById(final Long id);
