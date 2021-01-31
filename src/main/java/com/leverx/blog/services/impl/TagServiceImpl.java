@@ -3,7 +3,6 @@ package com.leverx.blog.services.impl;
 import com.leverx.blog.converters.TagConverter;
 import com.leverx.blog.payload.request.entities.TagRequest;
 import com.leverx.blog.payload.response.TagRatingResponse;
-import com.leverx.blog.payload.response.TagRatingView;
 import com.leverx.blog.payload.response.entities.TagResponse;
 import com.leverx.blog.repositories.TagRepository;
 import com.leverx.blog.services.TagService;

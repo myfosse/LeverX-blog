@@ -9,5 +9,5 @@ ENV MAIL_PASSWORD=cookingportalPassword2020.
 ENV JWT_SECRET_KEY=leverxSecretKey
 ENV JWT_EXPIRATION=86400000
 EXPOSE 8080
-ADD build/libs/docker-training-0.0.1-SNAPSHOT.jar docker-training.jar
-ENTRYPOINT ["java","-jar","/docker-training.jar"]
+ADD build/libs/blog-0.0.1-SNAPSHOT.jar blog.jar
+ENTRYPOINT ["java","-jar","/blog.jar"]

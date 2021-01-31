@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /** @author Andrey Egorov */
 @Service
@@ -108,12 +105,27 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
-  public List<ArticleResponse> getAllByStatus(EStatus status) {
-    return ArticleConverter.convertListOfEntityToRequest(articleRepository.getAllByStatus(status));
+  public List<ArticleResponse> getAllPublicArticles() {
+    return ArticleConverter.convertListOfEntityToRequest(
+        articleRepository.getAllByStatus(EStatus.PUBLIC));
   }
 
   @Override
   public List<ArticleResponse> getAllByUserId(Long userID) {
     return ArticleConverter.convertListOfEntityToRequest(articleRepository.getAllByUserId(userID));
+  }
+
+  @Override
+  public List<ArticleResponse> getAllPublicArticlesByTagsIn(Set<TagRequest> tagList) {
+
+    Set<Tag> tags = new HashSet<>();
+
+    for (TagRequest tagRequest : tagList) {
+      Optional<Tag> tag = tagRepository.findByName(tagRequest.getName());
+      tag.ifPresent(tags::add);
+    }
+
+    return ArticleConverter.convertListOfEntityToRequest(
+        articleRepository.getAllByTagsInAndStatus(tags, EStatus.PUBLIC));
   }
 }

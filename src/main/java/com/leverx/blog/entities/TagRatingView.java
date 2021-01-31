@@ -1,4 +1,4 @@
-package com.leverx.blog.payload.response;
+package com.leverx.blog.entities;
 
 import org.springframework.beans.factory.annotation.Value;
 

@@ -2,10 +2,12 @@ package com.leverx.blog.controllers;
 
 import com.leverx.blog.entities.EStatus;
 import com.leverx.blog.payload.request.entities.ArticleRequest;
+import com.leverx.blog.payload.request.entities.TagRequest;
 import com.leverx.blog.payload.response.MessageResponse;
 import com.leverx.blog.services.ArticleService;
 import com.leverx.blog.services.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /** @author Andrey Egorov */
 @RestController
@@ -42,8 +49,11 @@ public class ArticleController {
   }
 
   @GetMapping("/articles")
-  public @ResponseBody ResponseEntity<?> getAllPublicArticles() {
-    return new ResponseEntity<>(articleService.getAllByStatus(EStatus.PUBLIC), HttpStatus.OK);
+  public @ResponseBody ResponseEntity<?> getAllPublicArticles(
+      @RequestParam(value = "tags") ArrayList<TagRequest> tagRequests) {
+
+    return new ResponseEntity<>(
+        articleService.getAllPublicArticlesByTagsIn(new HashSet<>(tagRequests)), HttpStatus.OK);
   }
 
   @PutMapping("/articles/{id}")
@@ -69,17 +79,16 @@ public class ArticleController {
 
   @DeleteMapping("/articles/{id}")
   @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-  public @ResponseBody ResponseEntity<?> deleteArticle(
-          @PathVariable Long id) {
+  public @ResponseBody ResponseEntity<?> deleteArticle(@PathVariable Long id) {
 
     if (id < 0
-            || !articleService
+        || !articleService
             .findById(id)
             .getUserResponse()
             .getId()
             .equals(getAuthenticationUserID())) {
       return new ResponseEntity<>(
-              new MessageResponse("No such article for this user"), HttpStatus.BAD_REQUEST);
+          new MessageResponse("No such article for this user"), HttpStatus.BAD_REQUEST);
     }
 
     articleService.deleteById(id);

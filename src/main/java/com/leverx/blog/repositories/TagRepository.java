@@ -1,7 +1,7 @@
 package com.leverx.blog.repositories;
 
 import com.leverx.blog.entities.Tag;
-import com.leverx.blog.payload.response.TagRatingView;
+import com.leverx.blog.entities.TagRatingView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
