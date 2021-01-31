@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.List;
 
 /** @author Andrey Egorov */
 @Service
@@ -60,6 +61,11 @@ public class UserServiceImpl implements UserService {
   public UserResponse findById(Long id) {
     return UserConverter.convertEntityToResponse(
         userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+  }
+
+  @Override
+  public List<UserResponse> getAll() {
+    return UserConverter.convertListOfEntityToRequest(userRepository.findAll());
   }
 
   @Override

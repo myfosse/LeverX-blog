@@ -1,13 +1,11 @@
 package com.leverx.blog.controllers;
 
-import com.leverx.blog.entities.EStatus;
 import com.leverx.blog.payload.request.entities.ArticleRequest;
 import com.leverx.blog.payload.request.entities.TagRequest;
 import com.leverx.blog.payload.response.MessageResponse;
 import com.leverx.blog.services.ArticleService;
 import com.leverx.blog.services.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /** @author Andrey Egorov */
 @RestController

@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/api/v1/auth/**")
         .anonymous()
-        .antMatchers("/api/v1/articles")
+        .antMatchers(HttpMethod.GET, "/api/v1/articles")
         .permitAll();
 
     http.addFilterBefore(

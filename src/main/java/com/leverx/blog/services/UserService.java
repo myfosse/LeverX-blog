@@ -4,6 +4,8 @@ import com.leverx.blog.entities.User;
 import com.leverx.blog.payload.request.entities.UserRequest;
 import com.leverx.blog.payload.response.entities.UserResponse;
 
+import java.util.List;
+
 /** @author Andrey Egorov */
 public interface UserService {
 
@@ -14,6 +16,8 @@ public interface UserService {
   UserResponse update(UserRequest userRequest);
 
   UserResponse findById(Long id);
+
+  List<UserResponse> getAll();
 
   void deleteById(Long id);
 
