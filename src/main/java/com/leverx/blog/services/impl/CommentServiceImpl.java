@@ -1,5 +1,6 @@
 package com.leverx.blog.services.impl;
 
+import com.leverx.blog.converters.ArticleConverter;
 import com.leverx.blog.converters.CommentConverter;
 import com.leverx.blog.entities.Article;
 import com.leverx.blog.entities.Comment;
@@ -15,73 +16,82 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.List;
 
-/**
- * @author Andrey Egorov
- */
+/** @author Andrey Egorov */
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentRepository commentRepository;
-    private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
+  private final CommentRepository commentRepository;
+  private final ArticleRepository articleRepository;
+  private final UserRepository userRepository;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, ArticleRepository articleRepository, UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.articleRepository = articleRepository;
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public CommentServiceImpl(
+      CommentRepository commentRepository,
+      ArticleRepository articleRepository,
+      UserRepository userRepository) {
+    this.commentRepository = commentRepository;
+    this.articleRepository = articleRepository;
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public CommentResponse save(CommentRequest commentRequest) {
+  @Override
+  public CommentResponse save(CommentRequest commentRequest) {
 
-        User user =
-                userRepository
-                        .findById(commentRequest.getUserID())
-                        .orElseThrow(EntityNotFoundException::new);
+    User user =
+        userRepository
+            .findById(commentRequest.getUserID())
+            .orElseThrow(EntityNotFoundException::new);
 
-        Article article =
-                articleRepository
-                        .findById(commentRequest.getArticleID())
-                        .orElseThrow(EntityNotFoundException::new);
+    Article article =
+        articleRepository
+            .findById(commentRequest.getArticleID())
+            .orElseThrow(EntityNotFoundException::new);
 
-        Comment comment = CommentConverter.convertRequestToEntity(commentRequest);
-        comment.setArticle(article);
-        comment.setUser(user);
-        comment.setCreatedAt(LocalDate.now());
+    Comment comment = CommentConverter.convertRequestToEntity(commentRequest);
+    comment.setArticle(article);
+    comment.setUser(user);
+    comment.setCreatedAt(LocalDate.now());
 
-        return CommentConverter.convertEntityToResponse(commentRepository.save(comment));
-    }
+    return CommentConverter.convertEntityToResponse(commentRepository.save(comment));
+  }
 
-    @Override
-    public CommentResponse update(CommentRequest commentRequest) {
+  @Override
+  public CommentResponse update(CommentRequest commentRequest) {
 
-        User user =
-                userRepository
-                        .findById(commentRequest.getUserID())
-                        .orElseThrow(EntityNotFoundException::new);
+    User user =
+        userRepository
+            .findById(commentRequest.getUserID())
+            .orElseThrow(EntityNotFoundException::new);
 
-        Article article =
-                articleRepository
-                        .findById(commentRequest.getArticleID())
-                        .orElseThrow(EntityNotFoundException::new);
+    Article article =
+        articleRepository
+            .findById(commentRequest.getArticleID())
+            .orElseThrow(EntityNotFoundException::new);
 
-        Comment comment = CommentConverter.convertRequestToEntity(commentRequest);
-        comment.setArticle(article);
-        comment.setUser(user);
-        comment.setCreatedAt(LocalDate.now());
+    Comment comment = CommentConverter.convertRequestToEntity(commentRequest);
+    comment.setArticle(article);
+    comment.setUser(user);
+    comment.setCreatedAt(LocalDate.now());
 
-        return CommentConverter.convertEntityToResponse(commentRepository.save(comment));
-    }
+    return CommentConverter.convertEntityToResponse(commentRepository.save(comment));
+  }
 
-    @Override
-    public CommentResponse findById(Long id) {
-        return CommentConverter.convertEntityToResponse(commentRepository.findById(id).orElseThrow(EntityNotFoundException::new));
-    }
+  @Override
+  public CommentResponse findById(Long id) {
+    return CommentConverter.convertEntityToResponse(
+        commentRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+  }
 
-    @Override
-    public void deleteById(Long id) {
-        commentRepository.deleteById(id);
-    }
+  @Override
+  public void deleteById(Long id) {
+    commentRepository.deleteById(id);
+  }
+
+  @Override
+  public List<CommentResponse> getAllByArticleID(Long articleID) {
+    return CommentConverter.convertListOfEntityToRequest(
+        commentRepository.getAllByArticleId(articleID));
+  }
 }

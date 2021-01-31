@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-// TODO: find tags before add and update
 /** @author Andrey Egorov */
 @Service
 public class ArticleServiceImpl implements ArticleService {

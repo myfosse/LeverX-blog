@@ -41,6 +41,7 @@ public class ArticleController {
         articleService.getAllByUserId(getAuthenticationUserID()), HttpStatus.OK);
   }
 
+  //TODO: filtration
   @GetMapping("/articles")
   public @ResponseBody ResponseEntity<?> getAllPublicArticles() {
     return new ResponseEntity<>(articleService.getAllByStatus(EStatus.PUBLIC), HttpStatus.OK);
