@@ -4,8 +4,6 @@ import com.leverx.blog.entities.User;
 import com.leverx.blog.payload.request.entities.UserRequest;
 import com.leverx.blog.payload.response.entities.UserResponse;
 
-import java.util.Optional;
-
 /** @author Andrey Egorov */
 public interface UserService {
 
@@ -21,11 +19,13 @@ public interface UserService {
 
   UserResponse findByEmail(String email);
 
+  User getByEmail(String email);
+
   boolean existsByEmail(String email);
 
   String saveUserToRedis(User user);
 
-  Optional<User> getUserByTokenFromRedis(String token);
+  User getUserByTokenFromRedis(String token);
 
   void removeUserByTokenFromRedis(String token);
 }

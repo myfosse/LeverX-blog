@@ -35,4 +35,5 @@ logging:
 app:
   jwtSecret: ${JWT_SECRET_KEY}
   jwtExpirationMs: ${JWT_EXPIRATION}
-  confirmUser: "http://localhost:8080/api/v1/auth/confirm?token="
+  accountConfirmURL: "http://localhost:8080/api/v1/auth/confirm/"
+  passwordResetURL: "http://localhost:8080/api/v1/auth/reset/"

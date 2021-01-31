@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
 /** @author Andrey Egorov */
@@ -22,12 +23,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         new EntityNotFoundException("There is no such entity"), HttpStatus.NOT_FOUND);
   }
 
+  @ExceptionHandler(MessagingException.class)
+  protected ResponseEntity<?> handleCantSendEmail() {
+    return new ResponseEntity<>(
+        new EntityNotFoundException("Can't sent email to this address"), HttpStatus.NOT_FOUND);
+  }
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+      final MethodArgumentNotValidException ex,
+      final HttpHeaders headers,
+      final HttpStatus status,
+      final WebRequest request) {
 
     StringBuffer stringBuffer = new StringBuffer();
 

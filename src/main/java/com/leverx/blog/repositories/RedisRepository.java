@@ -5,7 +5,7 @@ import com.leverx.blog.entities.User;
 import java.util.Optional;
 
 /** @author Andrey Egorov */
-public interface UserRedisRepository {
+public interface RedisRepository {
 
   String saveUserToRedis(User user);
 

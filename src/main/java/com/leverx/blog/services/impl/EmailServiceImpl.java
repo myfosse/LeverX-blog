@@ -14,8 +14,11 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-  @Value("${app.confirmUser}")
-  private String passwordCreateURL;
+  @Value("${app.accountConfirmURL}")
+  private String accountConfirmURL;
+
+  @Value("${app.passwordResetURL}")
+  private String passwordResetURL;
 
   @Value("${spring.mail.username}")
   private String setFromMail;
@@ -28,8 +31,35 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public void sendMessageForSendResetCodeToMail(String email, String token)
-      throws MessagingException {
+  public void sendMessageForConfirmAccount(String email, String token) throws MessagingException {
+
+    MimeMessage message = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(message);
+
+    helper.setFrom(setFromMail);
+    helper.setTo(email);
+
+    String subject = "Here's the link to confirm your account";
+    String content =
+        "<p>Hello,</p>"
+            + "<p>You have requested to create new account.</p>"
+            + "<p>Click the link below to active your account:</p>"
+            + "<p><a href=\""
+            + accountConfirmURL
+            + token
+            + "\">Confirm my account</a></p>"
+            + "<br>"
+            + "<p>Ignore this email if you have not made the request.</p>";
+
+    helper.setSubject(subject);
+    helper.setText(content, true);
+
+    mailSender.send(message);
+  }
+
+  @Override
+  public void sendMessageForResetPassword(String email, String token) throws MessagingException {
+
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -37,22 +67,20 @@ public class EmailServiceImpl implements EmailService {
     helper.setTo(email);
 
     String subject = "Here's the link to reset your password";
-
     String content =
         "<p>Hello,</p>"
-            + "<p>You have requested to reset your password.</p>"
-            + "<p>Click the link below to change your password:</p>"
+            + "<p>You have requested to reset password.</p>"
+            + "<p>Click the link below to reset your password:</p>"
             + "<p><a href=\""
-            + passwordCreateURL
+            + passwordResetURL
             + token
-            + "\">Change my password</a></p>"
+            + "\">Reset my password</a></p>"
             + "<br>"
-            + "<p>Ignore this email if you do remember your password, "
-            + "or you have not made the request.</p>";
+            + "<p>Ignore this email if you have not made the request.</p>";
 
     helper.setSubject(subject);
-
     helper.setText(content, true);
+
     mailSender.send(message);
   }
 }

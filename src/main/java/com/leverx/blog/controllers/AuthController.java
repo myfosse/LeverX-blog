@@ -3,35 +3,35 @@ package com.leverx.blog.controllers;
 import com.leverx.blog.converters.UserConverter;
 import com.leverx.blog.entities.User;
 import com.leverx.blog.jwt.JwtUtils;
+import com.leverx.blog.payload.request.ForgotPasswordRequest;
+import com.leverx.blog.payload.request.ResetPasswordRequest;
 import com.leverx.blog.payload.request.SigninRequest;
 import com.leverx.blog.payload.request.entities.UserRequest;
 import com.leverx.blog.payload.response.JwtResponse;
+import com.leverx.blog.payload.response.MessageResponse;
 import com.leverx.blog.services.EmailService;
 import com.leverx.blog.services.UserService;
 import com.leverx.blog.services.impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /** @author Andrey Egorov */
-@Controller
+@RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-  private final AuthenticationManager authenticationManager;
   private final UserService userService;
   private final EmailService emailService;
+  private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
   @Autowired
@@ -46,8 +46,25 @@ public class AuthController {
     this.jwtUtils = jwtUtils;
   }
 
+  @PostMapping("/register")
+  public @ResponseBody ResponseEntity<?> registerUser(
+      @Valid @RequestBody final UserRequest userRequest) throws MessagingException {
+    String token = userService.saveUserToRedis(UserConverter.convertRequestToEntity(userRequest));
+    emailService.sendMessageForConfirmAccount(userRequest.getEmail(), token);
+    return ResponseEntity.ok(new MessageResponse("Confirm you account on email"));
+  }
+
+  @GetMapping("/confirm/{token}")
+  public ResponseEntity<?> confirmUser(@PathVariable String token) {
+    User user = userService.getUserByTokenFromRedis(token);
+    userService.save(user);
+    userService.removeUserByTokenFromRedis(token);
+    return new ResponseEntity<>(
+        new MessageResponse("You successfully confirm yor account!"), HttpStatus.CREATED);
+  }
+
   @PostMapping("/sign-in")
-  public @ResponseBody ResponseEntity<?> authenticateUser(
+  public @ResponseBody ResponseEntity<?> signin(
       @Valid @RequestBody final SigninRequest loginRequest) {
 
     Authentication authentication =
@@ -69,25 +86,34 @@ public class AuthController {
             userDetails.getEmail()));
   }
 
-  @PostMapping("/sign-up")
-  public @ResponseBody String registerUser(
-      @Valid @RequestBody final UserRequest userRequest, HttpServletRequest request)
-      throws MessagingException {
-    String token = userService.saveUserToRedis(UserConverter.convertRequestToEntity(userRequest));
-    request.setAttribute("token", token);
-    request.setAttribute("email", userRequest.getEmail());
-    emailService.sendMessageForSendResetCodeToMail(userRequest.getEmail(), token);
-    return "forward:/api/v1/email/send/confirm-email-message";
+  @PostMapping("/forgot-password")
+  public ResponseEntity<?> forgotPassword(
+      @Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) throws MessagingException {
+    User user = userService.getByEmail(forgotPasswordRequest.getEmail());
+    String token = userService.saveUserToRedis(user);
+    emailService.sendMessageForResetPassword(forgotPasswordRequest.getEmail(), token);
+    return ResponseEntity.ok(new MessageResponse("Check your email for reset password"));
   }
 
-  @GetMapping("/confirm")
-  public ResponseEntity<String> saveUser(@Param(value = "token") final String token) {
-    User user = userService.getUserByTokenFromRedis(token).orElse(null);
-    if (user == null) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  @PostMapping("/reset/{token}")
+  public @ResponseBody ResponseEntity<?> createPassword(
+      @PathVariable String token,
+      @Valid @RequestBody final ResetPasswordRequest resetPasswordRequest) {
+
+    if (!resetPasswordRequest
+        .getPassword()
+        .equals(resetPasswordRequest.getPasswordConfirmation())) {
+      return new ResponseEntity<>(
+          new MessageResponse("Error: Passwords doesn't match!"), HttpStatus.BAD_REQUEST);
     }
+
+    User user = userService.getUserByTokenFromRedis(token);
+    user.setPassword(resetPasswordRequest.getPassword());
     userService.save(user);
     userService.removeUserByTokenFromRedis(token);
-    return new ResponseEntity<>("You successfully confirm yor email!", HttpStatus.CREATED);
+
+    return ResponseEntity.ok(
+        "Successfully created a new password for the user with email: "
+            + resetPasswordRequest.getEmail());
   }
 }

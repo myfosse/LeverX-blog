@@ -5,5 +5,7 @@ import javax.mail.MessagingException;
 /** @author Andrey Egorov */
 public interface EmailService {
 
-  void sendMessageForSendResetCodeToMail(String email, String message) throws MessagingException;
+  void sendMessageForConfirmAccount(String email, String token) throws MessagingException;
+
+  void sendMessageForResetPassword(String email, String token) throws MessagingException;
 }

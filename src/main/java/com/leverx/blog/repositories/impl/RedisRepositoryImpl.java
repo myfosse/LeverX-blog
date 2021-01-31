@@ -1,7 +1,7 @@
 package com.leverx.blog.repositories.impl;
 
 import com.leverx.blog.entities.User;
-import com.leverx.blog.repositories.UserRedisRepository;
+import com.leverx.blog.repositories.RedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /** @author Andrey Egorov */
 @Repository
-public class UserRedisRepositoryImpl implements UserRedisRepository {
+public class RedisRepositoryImpl implements RedisRepository {
 
   private static final int EXPIRE_TIME_IN_HOURS = 24;
   private static final int BYTES_LENGTH = 24;
@@ -21,8 +21,14 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
   private final RedisTemplate<String, Object> redisTemplate;
 
   @Autowired
-  public UserRedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
+  public RedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
     this.redisTemplate = redisTemplate;
+  }
+
+  private String generateToken() {
+    byte[] randomBytes = new byte[BYTES_LENGTH];
+    new Random().nextBytes(randomBytes);
+    return Base64.getUrlEncoder().encodeToString(randomBytes);
   }
 
   @Override
@@ -42,11 +48,5 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
   @Override
   public void removeUserByTokenFromRedis(String token) {
     redisTemplate.opsForValue().getOperations().delete(token);
-  }
-
-  private String generateToken() {
-    byte[] randomBytes = new byte[BYTES_LENGTH];
-    new Random().nextBytes(randomBytes);
-    return Base64.getUrlEncoder().encodeToString(randomBytes);
   }
 }
