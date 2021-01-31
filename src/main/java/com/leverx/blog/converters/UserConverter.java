@@ -12,6 +12,7 @@ public class UserConverter {
 
   public static User convertRequestToEntity(UserRequest userRequest) {
     return User.builder()
+        .id(userRequest.getId())
         .firstName(userRequest.getFirstName())
         .lastName(userRequest.getLastName())
         .password(userRequest.getPassword())

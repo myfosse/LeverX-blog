@@ -26,7 +26,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   @ExceptionHandler(MessagingException.class)
   protected ResponseEntity<?> handleCantSendEmail() {
     return new ResponseEntity<>(
-        new EntityNotFoundException("Can't sent email to this address"), HttpStatus.NOT_FOUND);
+        new MessagingException("Can't sent email to this address"), HttpStatus.BAD_REQUEST);
   }
 
   @Override

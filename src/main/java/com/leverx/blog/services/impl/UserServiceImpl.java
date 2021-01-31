@@ -51,9 +51,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserResponse update(UserRequest userRequest) {
+
     User user = UserConverter.convertRequestToEntity(userRequest);
     user.setId(userRequest.getId());
     user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setCreatedAt(userRepository.findById(userRequest.getId()).get().getCreatedAt());
     return UserConverter.convertEntityToResponse(userRepository.save(user));
   }
 
